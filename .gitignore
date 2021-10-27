@@ -1,0 +1,12 @@
+UnitTestRunner
+ArrayPerformance
+CMakeCache.txt
+CMakeFiles
+Makefile
+bin
+cmake_install.cmake
+compile_commands.json
+googletest-build
+googletest-download
+googletest-src
+lib
