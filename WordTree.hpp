@@ -6,7 +6,7 @@
 class TreeNode
 {
   public:
-    bool endOfWord;
+    bool endOfWord = false;
     std::array<std::shared_ptr<TreeNode>, 26> children;
 };
 

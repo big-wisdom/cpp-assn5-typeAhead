@@ -14,22 +14,19 @@ void addRecursive(std::shared_ptr<TreeNode> node, std::string word)
     // if word is now empty set endOfWord to true
     if (word.length() == 0)
     {
-        std::cout << "set endOfWord to true" << std::endl;
+        node->endOfWord = true;
+        return;
     }
 
     // otherwise grab next child
     int index = static_cast<int>(std::tolower(word[0])) - 97;
+    // if child is null create a new TreeNode for it
     if (node->children[index] == NULL)
     {
-        std::cout << "child equals NULL" << std::endl;
         node->children[index] = std::make_shared<TreeNode>();
     }
-    std::cout << "node after replacement" << node->children[index] << std::endl;
-    // std::cout << "index " << (int)std::tolower(word[0]) - 97 << std::endl;
-    // std::shared_ptr<TreeNode> child = node->children[(int)std::tolower(word[0]) - 97];
-    //std::cout << child << std::endl;
-    //addRecursive(child, word.substr(1,word.length()-1));
-    //std::cout << word[0] << std::endl;
+
+    addRecursive(node->children[index], word.substr(1, word.length() - 1));
 }
 
 void WordTree::add(std::string word)
