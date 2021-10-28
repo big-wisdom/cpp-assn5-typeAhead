@@ -1,5 +1,5 @@
 #include "WordTree.hpp"
-
+#include <queue>
 #include <array>
 #include <cctype>
 #include <iostream>
@@ -56,11 +56,6 @@ bool WordTree::find(std::string word)
     return findRecursive(root, word);
 }
 
-void breadthFirstSearch()
-{
-    std::cout << "bfs" << std::endl;
-}
-
 std::shared_ptr<TreeNode> getNodeRecursive(std::shared_ptr<TreeNode> node, std::string partial)
 {
     if (partial.length() == 0)
@@ -77,11 +72,39 @@ std::shared_ptr<TreeNode> getNodeRecursive(std::shared_ptr<TreeNode> node, std::
     return getNodeRecursive(node->children[index], partial.substr(1, partial.length() - 1));
 }
 
+void breadthFirstSearch(std::shared_ptr<TreeNode> node)
+{
+    std::queue<std::shared_ptr<TreeNode>> fifo;
+    fifo.push(node);
+
+    std::vector<std::string> words;
+
+    while(fifo.size() > 0)
+    {
+        std::cout << "Fifo Size before pop: " << fifo.size() << std::endl;
+        std::shared_ptr<TreeNode> current = fifo.front();
+        fifo.pop();
+        std::cout << "Fifo Size after pop: " << fifo.size() << std::endl;
+        // add all children if they exist
+        for(std::shared_ptr<TreeNode> child : current->children) 
+        {
+            if(child != NULL)
+            {
+                fifo.push(child); 
+                std::cout << "not null" << std::endl;
+            }
+        }
+        // add this word if it is one
+        if(current->endOfWord) std::cout << "end of word" << std::endl;
+    }
+}
+
 std::vector<std::string> WordTree::predict(std::string partial, std::uint8_t howMany)
 {
     // navigate to the end of the partial
     std::shared_ptr node = getNodeRecursive(root, partial);
     // breadth first search
+    breadthFirstSearch(node);
     // create queue
     // add all current children to it
     // empty queue
