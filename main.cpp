@@ -1,6 +1,7 @@
 #include "WordTree.hpp"
 #include "rlutil.h"
 #include <iostream>
+#include <utility>
 //#include <string>
 
 void printOut(std::string message)
@@ -17,9 +18,28 @@ int main()
     wt.predict("Eli", 8);
     // clear console
     rlutil::cls();
+    auto cursor = std::make_pair(1, 1);
 
     // wait for input 
-    char c = static_cast<char>(rlutil::getkey());
-    std::cout << c << std::endl;
+    while(true)
+    {
+        int i = rlutil::getkey();
+        if(i == rlutil::KEY_BACKSPACE) 
+        {
+            std::get<0>(cursor) -= 1;
+            rlutil::locate(std::get<0>(cursor), std::get<1>(cursor));
+            rlutil::setChar(' ');
+        }
+        else if(i == 10)
+        {
+            continue;
+        }
+        else
+        {
+            char c = static_cast<char>(i);
+            std::cout << c;
+            std::get<0>(cursor) += 1; // increment x?
+        }
+    }
     return 0;
 }
