@@ -1,11 +1,14 @@
 #include "WordTree.hpp"
 #include "rlutil.h"
-
+#include <fstream>
+#include <string>
+#include <memory>
+#include <algorithm>
 #include <iostream>
 #include <utility>
 //#include <string>
 
-void showPredictions(std::pair<int, int> cursor, WordTree wt, std::string partial)
+void showPredictions(std::pair<int, int> cursor, std::shared_ptr<WordTree> wt, std::string partial)
 {
     // move cursor to where we start words
     rlutil::locate(1, 2);
@@ -16,7 +19,7 @@ void showPredictions(std::pair<int, int> cursor, WordTree wt, std::string partia
     }
     rlutil::locate(1, 2); // put it back
     // print words
-    for (std::string word : wt.predict(partial, 8))
+    for (std::string word : wt->predict(partial, 6))
     {
         std::cout << word << std::endl;
     }
@@ -35,13 +38,38 @@ void debug(std::string partial, std::pair<int, int> cursor)
     rlutil::locate(std::get<0>(cursor), std::get<1>(cursor));
 }
 
+
+std::shared_ptr<WordTree> readDictionary(std::string filename)
+{
+    auto wordTree = std::make_shared<WordTree>();
+    std::ifstream inFile = std::ifstream(filename, std::ios::in);
+
+    while (!inFile.eof())
+    {
+        std::string word;
+        std::getline(inFile, word);
+        // Need to consume the carriage return character for some systems, if it exists
+        if (!word.empty() && word[word.size() - 1] == '\r')
+        {
+            word.erase(word.end() - 1);
+        }
+        // Keep only if everything is an alphabetic character -- Have to send isalpha an unsigned char or
+        // it will throw exception on negative values; e.g., characters with accent marks.
+        if (std::all_of(word.begin(), word.end(), [](unsigned char c) { return std::isalpha(c); }))
+        {
+            std::transform(word.begin(), word.end(), word.begin(), [](char c) { return static_cast<char>(std::tolower(c)); });
+            wordTree->add(word);
+        }
+    }
+
+    return wordTree;
+}
+
+
 int main()
 {
     // create WordTree
-    WordTree wt;
-    // add a word
-    wt.add("EliRules");
-    wt.add("element");
+    auto wt = readDictionary("dictionary.txt");
     rlutil::cls();                      // Clear screen
     auto cursor = std::make_pair(1, 1); // CURSOR
     std::string partial = "";
@@ -72,7 +100,7 @@ int main()
             std::get<0>(cursor) += 1; // increment x?
         }
         showPredictions(cursor, wt, partial);
-        debug(partial, cursor);
+        // debug(partial, cursor);
     }
     return 0;
 }
