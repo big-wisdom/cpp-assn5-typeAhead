@@ -1,3 +1,4 @@
+build/*
 UnitTestRunner
 ArrayPerformance
 CMakeCache.txt

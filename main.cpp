@@ -11,6 +11,6 @@ int main() {
     // create WordTree
     WordTree wt;
     // add a word
-    wt.add("Eli");
+    wt.add("EliRules");
     return 0;
 }

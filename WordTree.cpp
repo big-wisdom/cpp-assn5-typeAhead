@@ -2,48 +2,50 @@
 #include <vector>
 #include <array>
 #include <memory>
+#include <cctype>
+#include "WordTree.hpp"
 
-class TreeNode {
-    public:
-        bool endOfWord;
+WordTree::WordTree() : root(new TreeNode()) {}
 
-        std::array<std::shared_ptr<TreeNode>, 26> children;
-};
+void addRecursive(std::shared_ptr<TreeNode> node, std::string word)
+{
+    // if word is now empty set endOfWord to true
+    if(word.length() == 0)
+    {
+        std::cout << "set endOfWord to true" << std::endl;
+    }
 
-class WordTree {
-    public:
-        TreeNode root;
+    // otherwise grab next child
+    int index = static_cast<int>(std::tolower(word[0])) - 97;
+    std::cout << "index" << index << std::endl;
+    std::cout << node->children.size() << std::endl;
+    std::cout << node->children[0] << std::endl;
+    // std::cout << "index " << (int)std::tolower(word[0]) - 97 << std::endl;
+    // std::shared_ptr<TreeNode> child = node->children[(int)std::tolower(word[0]) - 97];
+    //std::cout << child << std::endl;
+    //addRecursive(child, word.substr(1,word.length()-1));
+    //std::cout << word[0] << std::endl;
+}
 
-        WordTree()
-        {
-            std::cout << "Initializing WordTree" << std::endl;
-        }
+void WordTree::add(std::string word)
+{
+    addRecursive(root, word);
+}
 
-        void add(std::string word)
-        {
-            std::cout << "adding " << word << std::endl;
-            // pick out first letter
-            std::cout << word[0] << std::endl;
-            // check to see if child exists
-            // if it doesn't create it
-            // recursively call add on it
-        }
+bool WordTree::find(std::string word)
+{
+    std::cout << "Finding " << word << std::endl;
+    return true;
+}
 
-        bool find(std::string word)
-        {
-            std::cout << "Finding " << word << std::endl;
-            return true;
-        }
-
-        std::vector<std::string> predict(std::string partial, std::uint8_t howMany)
-        {
-            std::vector<std::string> prediction;
-            std::cout << "Finding " << partial << " " << howMany << "times" << std::endl;
-            return prediction;
-        }
-        std::size_t size()
-        {
-            std::size_t temp = 8;
-            return temp;
-        }
-};
+std::vector<std::string> WordTree::predict(std::string partial, std::uint8_t howMany)
+{
+    std::vector<std::string> prediction;
+    std::cout << "Finding " << partial << " " << howMany << "times" << std::endl;
+    return prediction;
+}
+std::size_t WordTree::size()
+{
+    std::size_t temp = 8;
+    return temp;
+}
