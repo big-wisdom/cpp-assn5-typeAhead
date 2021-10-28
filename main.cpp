@@ -24,6 +24,17 @@ void showPredictions(std::pair<int, int> cursor, WordTree wt, std::string partia
     rlutil::locate(std::get<0>(cursor), std::get<1>(cursor));
 }
 
+void debug(std::string partial, std::pair<int, int> cursor)
+{
+    // move cursor down to debug area
+    rlutil::locate(1, 15);
+    // print stuff
+    std::cout << "partial: " << partial << std::endl;
+    std::cout << "cursor: " << std::get<0>(cursor) << ", " << std::get<1>(cursor) << std::endl;
+    // move it back
+    rlutil::locate(std::get<0>(cursor), std::get<1>(cursor));
+}
+
 int main()
 {
     // create WordTree
@@ -41,10 +52,13 @@ int main()
         int i = rlutil::getkey();
         if (i == rlutil::KEY_BACKSPACE)
         {
-            std::get<0>(cursor) -= 1;
-            rlutil::locate(std::get<0>(cursor), std::get<1>(cursor));
-            rlutil::setChar(' ');
-            partial = partial.substr(0, partial.length() - 1);
+            if (partial.length() > 0)
+            {
+                std::get<0>(cursor) -= 1;
+                rlutil::locate(std::get<0>(cursor), std::get<1>(cursor));
+                rlutil::setChar(' ');
+                partial = partial.substr(0, partial.length() - 1);
+            }
         }
         else if (i == 10)
         {
@@ -58,6 +72,7 @@ int main()
             std::get<0>(cursor) += 1; // increment x?
         }
         showPredictions(cursor, wt, partial);
+        debug(partial, cursor);
     }
     return 0;
 }
