@@ -1,25 +1,30 @@
-#include <iostream>
-#include <vector>
-#include <array>
-#include <memory>
-#include <cctype>
 #include "WordTree.hpp"
 
-WordTree::WordTree() : root(new TreeNode()) {}
+#include <array>
+#include <cctype>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+WordTree::WordTree() :
+    root(new TreeNode()) {}
 
 void addRecursive(std::shared_ptr<TreeNode> node, std::string word)
 {
     // if word is now empty set endOfWord to true
-    if(word.length() == 0)
+    if (word.length() == 0)
     {
         std::cout << "set endOfWord to true" << std::endl;
     }
 
     // otherwise grab next child
     int index = static_cast<int>(std::tolower(word[0])) - 97;
-    std::cout << "index" << index << std::endl;
-    std::cout << node->children.size() << std::endl;
-    std::cout << node->children[0] << std::endl;
+    if (node->children[index] == NULL)
+    {
+        std::cout << "child equals NULL" << std::endl;
+        node->children[index] = std::make_shared<TreeNode>();
+    }
+    std::cout << "node after replacement" << node->children[index] << std::endl;
     // std::cout << "index " << (int)std::tolower(word[0]) - 97 << std::endl;
     // std::shared_ptr<TreeNode> child = node->children[(int)std::tolower(word[0]) - 97];
     //std::cout << child << std::endl;

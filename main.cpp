@@ -1,5 +1,6 @@
-#include <iostream>
 #include "WordTree.hpp"
+
+#include <iostream>
 //#include <string>
 
 void printOut(std::string message)
@@ -7,7 +8,8 @@ void printOut(std::string message)
     std::cout << message << std::endl;
 }
 
-int main() {
+int main()
+{
     // create WordTree
     WordTree wt;
     // add a word
