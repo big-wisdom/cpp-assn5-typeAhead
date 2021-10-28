@@ -64,7 +64,6 @@ std::shared_ptr<TreeNode> getNodeRecursive(std::shared_ptr<TreeNode> node, std::
 
     // otherwise grab next child
     int index = static_cast<int>(std::tolower(partial[0])) - 97;
-    // if child is null create a new TreeNode for it
     if (node->children[index] == NULL)
     {
         return NULL;
@@ -79,7 +78,7 @@ std::vector<std::string> breadthFirstSearch(std::shared_ptr<TreeNode> node, std:
     fifo.push(std::make_pair(node, partial));
 
     std::vector<std::string> words;
-    if (partial == "")
+    if (partial == "" || node == NULL)
         return words;
 
     while (fifo.size() > 0)
