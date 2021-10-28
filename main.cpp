@@ -14,6 +14,6 @@ int main()
     WordTree wt;
     // add a word
     wt.add("EliRules");
-    std::cout << wt.find("ElRules") << std::endl;
+    wt.predict("Eli", 8);
     return 0;
 }
