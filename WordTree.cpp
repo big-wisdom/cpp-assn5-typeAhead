@@ -72,30 +72,32 @@ std::shared_ptr<TreeNode> getNodeRecursive(std::shared_ptr<TreeNode> node, std::
     return getNodeRecursive(node->children[index], partial.substr(1, partial.length() - 1));
 }
 
-void breadthFirstSearch(std::shared_ptr<TreeNode> node)
+std::vector<std::string> breadthFirstSearch(std::shared_ptr<TreeNode> node, std::string partial)
 {
-    std::queue<std::shared_ptr<TreeNode>> fifo;
-    fifo.push(node);
+    std::queue<std::pair<std::shared_ptr<TreeNode>, std::string>> fifo;
+    fifo.push(std::make_pair(node, partial));
 
     std::vector<std::string> words;
 
     while(fifo.size() > 0)
     {
         std::cout << "Fifo Size before pop: " << fifo.size() << std::endl;
-        std::shared_ptr<TreeNode> current = fifo.front();
+        std::pair<std::shared_ptr<TreeNode>, std::string> current = fifo.front();
         fifo.pop();
         std::cout << "Fifo Size after pop: " << fifo.size() << std::endl;
         // add all children if they exist
-        for(std::shared_ptr<TreeNode> child : current->children) 
+        for(size_t i=0 ; i< std::get<0>(current)->children.size(); i++)
         {
+            std::shared_ptr<TreeNode> child = std::get<0>(current)->children[i];
             if(child != NULL)
             {
-                fifo.push(child); 
+                fifo.push(std::make_pair(child, std::get<1>(current) + static_cast<char>(i+97))); 
                 std::cout << "not null" << std::endl;
             }
         }
         // add this word if it is one
-        if(current->endOfWord) std::cout << "end of word" << std::endl;
+        if(std::get<0>(current)->endOfWord) words.push_back(std::get<1>(current));
+        return words;
     }
 }
 
@@ -104,7 +106,7 @@ std::vector<std::string> WordTree::predict(std::string partial, std::uint8_t how
     // navigate to the end of the partial
     std::shared_ptr node = getNodeRecursive(root, partial);
     // breadth first search
-    breadthFirstSearch(node);
+    breadthFirstSearch(node, partial);
     // create queue
     // add all current children to it
     // empty queue

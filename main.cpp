@@ -15,7 +15,6 @@ int main()
     WordTree wt;
     // add a word
     wt.add("EliRules");
-    wt.predict("Eli", 8);
     // clear console
     rlutil::cls();
     auto cursor = std::make_pair(1, 1);
