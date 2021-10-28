@@ -1,9 +1,10 @@
 #include "WordTree.hpp"
-#include <queue>
+
 #include <array>
 #include <cctype>
 #include <iostream>
 #include <memory>
+#include <queue>
 #include <vector>
 
 WordTree::WordTree() :
@@ -79,26 +80,24 @@ std::vector<std::string> breadthFirstSearch(std::shared_ptr<TreeNode> node, std:
 
     std::vector<std::string> words;
 
-    while(fifo.size() > 0)
+    while (fifo.size() > 0)
     {
-        std::cout << "Fifo Size before pop: " << fifo.size() << std::endl;
         std::pair<std::shared_ptr<TreeNode>, std::string> current = fifo.front();
         fifo.pop();
-        std::cout << "Fifo Size after pop: " << fifo.size() << std::endl;
         // add all children if they exist
-        for(size_t i=0 ; i< std::get<0>(current)->children.size(); i++)
+        for (size_t i = 0; i < std::get<0>(current)->children.size(); i++)
         {
             std::shared_ptr<TreeNode> child = std::get<0>(current)->children[i];
-            if(child != NULL)
+            if (child != NULL)
             {
-                fifo.push(std::make_pair(child, std::get<1>(current) + static_cast<char>(i+97))); 
-                std::cout << "not null" << std::endl;
+                fifo.push(std::make_pair(child, std::get<1>(current) + static_cast<char>(i + 97)));
             }
         }
         // add this word if it is one
-        if(std::get<0>(current)->endOfWord) words.push_back(std::get<1>(current));
-        return words;
+        if (std::get<0>(current)->endOfWord)
+            words.push_back(std::get<1>(current));
     }
+    return words;
 }
 
 std::vector<std::string> WordTree::predict(std::string partial, std::uint8_t howMany)
@@ -106,14 +105,12 @@ std::vector<std::string> WordTree::predict(std::string partial, std::uint8_t how
     // navigate to the end of the partial
     std::shared_ptr node = getNodeRecursive(root, partial);
     // breadth first search
-    breadthFirstSearch(node, partial);
+    return breadthFirstSearch(node, partial);
     // create queue
     // add all current children to it
     // empty queue
     // search condition
     // return the top howMany results of breadth first
-    std::vector<std::string> prediction;
-    return prediction;
 }
 std::size_t WordTree::size()
 {
