@@ -79,6 +79,8 @@ std::vector<std::string> breadthFirstSearch(std::shared_ptr<TreeNode> node, std:
     fifo.push(std::make_pair(node, partial));
 
     std::vector<std::string> words;
+    if (partial == "")
+        return words;
 
     while (fifo.size() > 0)
     {
