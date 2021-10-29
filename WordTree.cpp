@@ -14,8 +14,11 @@ void addRecursive(std::shared_ptr<TreeNode> node, std::string word, std::size_t 
 {
     if (word.length() == 0)
     {
-        node->endOfWord = true;
-        s += 1;
+        if(!node->endOfWord)
+        {
+            s += 1;
+            node->endOfWord = true;
+        }
         return;
     }
 
@@ -32,7 +35,8 @@ void addRecursive(std::shared_ptr<TreeNode> node, std::string word, std::size_t 
 
 void WordTree::add(std::string word)
 {
-    addRecursive(root, word, s);
+    if(word.length() != 0)
+        addRecursive(root, word, s);
 }
 
 bool findRecursive(std::shared_ptr<TreeNode> node, std::string word)
@@ -76,11 +80,19 @@ std::shared_ptr<TreeNode> getNodeRecursive(std::shared_ptr<TreeNode> node, std::
 std::vector<std::string> breadthFirstSearch(std::shared_ptr<TreeNode> node, std::string partial, std::uint8_t howMany)
 {
     std::queue<std::pair<std::shared_ptr<TreeNode>, std::string>> fifo;
-    fifo.push(std::make_pair(node, partial));
 
     std::vector<std::string> words;
     if (partial == "" || node == NULL)
         return words;
+    // Add the children of the prefix node
+    for (size_t i = 0; i < node->children.size(); i++)
+    {
+        std::shared_ptr<TreeNode> child = node->children[i];
+        if (child != NULL)
+        {
+            fifo.push(std::make_pair(child, partial + static_cast<char>(i + 97)));
+        }
+    }
 
     while (fifo.size() > 0 && words.size() < howMany)
     {
