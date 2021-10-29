@@ -90,7 +90,7 @@ int main()
 {
     // create WordTree
     auto wt = readDictionary("dictionary.txt");
-    // rlutil::cls();                      // Clear screen
+    rlutil::cls();                      // Clear screen
     auto cursor = std::make_pair(1, 1); // CURSOR
     std::string partial = "";
     // wait for input
