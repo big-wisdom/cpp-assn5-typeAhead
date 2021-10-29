@@ -10,11 +10,12 @@
 WordTree::WordTree() :
     root(new TreeNode()) {}
 
-void addRecursive(std::shared_ptr<TreeNode> node, std::string word)
+void addRecursive(std::shared_ptr<TreeNode> node, std::string word, std::size_t &s)
 {
     if (word.length() == 0)
     {
         node->endOfWord = true;
+        s += 1;
         return;
     }
 
@@ -26,12 +27,12 @@ void addRecursive(std::shared_ptr<TreeNode> node, std::string word)
         node->children[index] = std::make_shared<TreeNode>();
     }
 
-    addRecursive(node->children[index], word.substr(1, word.length() - 1));
+    addRecursive(node->children[index], word.substr(1, word.length() - 1), s);
 }
 
 void WordTree::add(std::string word)
 {
-    addRecursive(root, word);
+    addRecursive(root, word, s);
 }
 
 bool findRecursive(std::shared_ptr<TreeNode> node, std::string word)
@@ -116,6 +117,5 @@ std::vector<std::string> WordTree::predict(std::string partial, std::uint8_t how
 
 std::size_t WordTree::size()
 {
-    std::size_t temp = 8;
-    return temp;
+    return s;
 }
