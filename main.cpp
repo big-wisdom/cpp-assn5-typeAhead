@@ -26,20 +26,20 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-void showPredictions(std::pair<int, int> cursor, std::shared_ptr<WordTree> wt, std::string partial)
+void showPredictions(std::pair<int, int> cursor, std::shared_ptr<WordTree> wt, std::string partial, int howMany)
 {
     // move cursor to where we start words
     rlutil::locate(1, 2);
     // clear previous words
-    for (int i = 0; i < 20; i++)
+    for (std::size_t i = 0; i < 20; i++)
     {
-        std::cout << std::string(20, ' ') << std::endl;
+        std::cout << std::string(40, ' ') << std::endl;
     }
     rlutil::locate(1, 2); // put it back
     // print words
     if(partial.length() > 0)
     {
-        for (std::string word : wt->predict(*split(partial, ' ').rbegin(), 6))
+        for (std::string word : wt->predict(*split(partial, ' ').rbegin(), howMany))
         {
             std::cout << word << std::endl;
         }
@@ -120,7 +120,7 @@ int main()
             partial += c;
             std::get<0>(cursor) += 1; // increment x?
         }
-        showPredictions(cursor, wt, partial);
+        showPredictions(cursor, wt, partial, 9);
         // debug(partial, cursor);
     }
     return 0;
