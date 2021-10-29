@@ -1,6 +1,9 @@
 #include "WordTree.hpp"
 #include "rlutil.h"
 #include <fstream>
+#include <sstream>
+#include <vector>
+#include <iterator>
 #include <string>
 #include <memory>
 #include <algorithm>
@@ -65,6 +68,20 @@ std::shared_ptr<WordTree> readDictionary(std::string filename)
     return wordTree;
 }
 
+template <typename Out>
+void split(const std::string &s, char delim, Out result) {
+    std::istringstream iss(s);
+    std::string item;
+    while (std::getline(iss, item, delim)) {
+        *result++ = item;
+    }
+}
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
 
 int main()
 {
@@ -99,7 +116,7 @@ int main()
             partial += c;
             std::get<0>(cursor) += 1; // increment x?
         }
-        showPredictions(cursor, wt, partial);
+        showPredictions(cursor, wt, *split(partial, ' ').rbegin());
         // debug(partial, cursor);
     }
     return 0;
