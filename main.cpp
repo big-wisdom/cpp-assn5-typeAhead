@@ -11,6 +11,21 @@
 #include <utility>
 //#include <string>
 
+template <typename Out>
+void split(const std::string &s, char delim, Out result) {
+    std::istringstream iss(s);
+    std::string item;
+    while (std::getline(iss, item, delim)) {
+        *result++ = item;
+    }
+}
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
 void showPredictions(std::pair<int, int> cursor, std::shared_ptr<WordTree> wt, std::string partial)
 {
     // move cursor to where we start words
@@ -22,9 +37,12 @@ void showPredictions(std::pair<int, int> cursor, std::shared_ptr<WordTree> wt, s
     }
     rlutil::locate(1, 2); // put it back
     // print words
-    for (std::string word : wt->predict(partial, 6))
+    if(partial.length() > 0)
     {
-        std::cout << word << std::endl;
+        for (std::string word : wt->predict(*split(partial, ' ').rbegin(), 6))
+        {
+            std::cout << word << std::endl;
+        }
     }
     // move cursor back
     rlutil::locate(std::get<0>(cursor), std::get<1>(cursor));
@@ -68,20 +86,6 @@ std::shared_ptr<WordTree> readDictionary(std::string filename)
     return wordTree;
 }
 
-template <typename Out>
-void split(const std::string &s, char delim, Out result) {
-    std::istringstream iss(s);
-    std::string item;
-    while (std::getline(iss, item, delim)) {
-        *result++ = item;
-    }
-}
-
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    split(s, delim, std::back_inserter(elems));
-    return elems;
-}
 
 int main()
 {
@@ -116,7 +120,7 @@ int main()
             partial += c;
             std::get<0>(cursor) += 1; // increment x?
         }
-        showPredictions(cursor, wt, *split(partial, ' ').rbegin());
+        showPredictions(cursor, wt, partial);
         // debug(partial, cursor);
     }
     return 0;
