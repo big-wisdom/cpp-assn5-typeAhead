@@ -26,12 +26,12 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-void showPredictions(std::pair<int, int> cursor, std::shared_ptr<WordTree> wt, std::string partial, int howMany)
+void showPredictions(std::pair<int, int> cursor, std::shared_ptr<WordTree> wt, std::string partial, std::uint8_t howMany)
 {
     // move cursor to where we start words
     rlutil::locate(1, 2);
     // clear previous words
-    for (std::size_t i = 0; i < 20; i++)
+    for (int i = 0; i < 20; i++)
     {
         std::cout << std::string(40, ' ') << std::endl;
     }
@@ -64,7 +64,6 @@ std::shared_ptr<WordTree> readDictionary(std::string filename)
 {
     auto wordTree = std::make_shared<WordTree>();
     std::ifstream inFile = std::ifstream(filename, std::ios::in);
-
     while (!inFile.eof())
     {
         std::string word;
@@ -91,10 +90,9 @@ int main()
 {
     // create WordTree
     auto wt = readDictionary("dictionary.txt");
-    rlutil::cls();                      // Clear screen
+    // rlutil::cls();                      // Clear screen
     auto cursor = std::make_pair(1, 1); // CURSOR
     std::string partial = "";
-
     // wait for input
     while (true)
     {
@@ -120,7 +118,7 @@ int main()
             partial += c;
             std::get<0>(cursor) += 1; // increment x?
         }
-        showPredictions(cursor, wt, partial, 9);
+        showPredictions(cursor, wt, partial, static_cast<std::uint8_t>(9));
         // debug(partial, cursor);
     }
     return 0;

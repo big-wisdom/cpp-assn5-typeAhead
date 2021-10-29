@@ -109,7 +109,9 @@ std::vector<std::string> breadthFirstSearch(std::shared_ptr<TreeNode> node, std:
         }
         // add this word if it is one
         if (std::get<0>(current)->endOfWord)
+        {
             words.push_back(std::get<1>(current));
+        }
     }
     return words;
 }
